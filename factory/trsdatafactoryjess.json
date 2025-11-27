@@ -1,0 +1,9 @@
+{
+	"name": "trsdatafactoryjess",
+	"location": "uksouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "ad88adf6-c1cf-4f79-a823-cf6c54b3e01b",
+		"tenantId": "6e0eb70b-408a-43a1-aa52-49b6ae58286b"
+	}
+}
