@@ -1,0 +1,43 @@
+# This is a Databricks asset bundle definition for dab_salesproject.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: dab_salesproject
+  uuid: b467f477-73cc-444b-bb58-a5687c43bdd7
+
+include:
+  - resources/*.yml
+  - resources/*/*.yml
+
+# Variable declarations. These variables are assigned in the dev/prod targets below.
+variables:
+  catalog:
+    description: The catalog to use
+  schema:
+    description: The schema to use
+
+targets:
+  dev:
+    # The default target uses 'mode: development' to create a development copy.
+    # - Deployed resources get prefixed with '[dev my_user_name]'
+    # - Any job schedules and triggers are paused by default.
+    # See also https://docs.databricks.com/dev-tools/bundles/deployment-modes.html.
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-1908949074644557.17.azuredatabricks.net
+    variables:
+      catalog: sales_project
+      schema: ${workspace.current_user.short_name}
+  prod:
+    mode: production
+    allow_duplicate_names: true  # skips check if pipeline already exists
+    workspace:
+      host: https://adb-1908949074644557.17.azuredatabricks.net
+      # We explicitly deploy to /Workspace/Users/jessepepple36@gmail.com to make sure we only have a single copy.
+      root_path: /Workspace/Users/jessepepple36@gmail.com/PROD/.bundle/${bundle.name}/${bundle.target}
+    variables:
+      catalog: sales_project
+      schema: prod
+    permissions:
+      - user_name: jessepepple36@gmail.com
+        level: CAN_MANAGE
