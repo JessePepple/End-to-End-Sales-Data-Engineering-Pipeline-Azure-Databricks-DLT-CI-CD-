@@ -1,0 +1,30 @@
+{
+	"name": "web_src",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "link_source",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"p_srcname": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": {
+					"value": "AnshLambaYoutube/refs/heads/main/DBT_Masterclass/@{dataset().p_srcname}",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

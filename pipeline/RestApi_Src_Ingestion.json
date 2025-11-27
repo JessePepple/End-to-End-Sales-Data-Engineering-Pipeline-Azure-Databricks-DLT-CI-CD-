@@ -1,0 +1,179 @@
+{
+	"name": "RestApi_Src_Ingestion",
+	"properties": {
+		"activities": [
+			{
+				"name": "Validate_Source",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "GET",
+					"url": "https://raw.githubusercontent.com/anshlambagit/AnshLambaYoutube/refs/heads/main/DBT_Masterclass/dim_customer.csv"
+				}
+			},
+			{
+				"name": "ForAllTheFiles",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Validate_Source",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.p_files",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Source_Ingestion",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "Current_Timestamp",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "HttpReadSettings",
+										"requestMethod": "GET"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "ParquetWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "web_src",
+									"type": "DatasetReference",
+									"parameters": {
+										"p_srcname": {
+											"value": "@item().p_srcname",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "sink_ds",
+									"type": "DatasetReference",
+									"parameters": {
+										"p_name": {
+											"value": "@concat(item().p_name, ' ', variables('Current_timestamp'))",
+											"type": "Expression"
+										},
+										"p_folder": {
+											"value": "@concat(item().p_folder, '-', 'sales_data')",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "Current_Timestamp",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Current_timestamp",
+								"value": {
+									"value": "@utcNow()",
+									"type": "Expression"
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"p_files": {
+				"type": "array",
+				"defaultValue": [
+					{
+						"p_srcname": "dim_customer.csv",
+						"p_folder": "dim_customer",
+						"p_name": "dim_customer.parquet"
+					},
+					{
+						"p_srcname": "dim_date.csv",
+						"p_folder": "dim_date",
+						"p_name": "dim_date.parquet"
+					},
+					{
+						"p_srcname": "dim_product.csv",
+						"p_folder": "dim_product",
+						"p_name": "dim_product.parquet"
+					},
+					{
+						"p_srcname": "dim_store.csv",
+						"p_folder": "dim_store",
+						"p_name": "dim_store.parquet"
+					},
+					{
+						"p_srcname": "fact_sales.csv",
+						"p_folder": "fact_sales",
+						"p_name": "fact_sales.parquet"
+					}
+				]
+			}
+		},
+		"variables": {
+			"Current_timestamp": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
