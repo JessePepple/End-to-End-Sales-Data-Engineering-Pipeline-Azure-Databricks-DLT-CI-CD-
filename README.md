@@ -4,6 +4,8 @@ This project demonstrates a complete Azure Data Engineering solution that proces
 
 The solution is designed to handle incremental ingestion, schema evolution, CDC, and dimensional modelling, making it suitable for real enterprise workloads.
 
+For detailed storytelling of this project visit this -> https://www.jesseportfolio.co.uk/post/end-to-end-sales-data-engineering-pipeline-azure-databricks-dlt-ci-cd 
+
 <img width="1444" height="902" alt="Sales_Data" src="https://github.com/user-attachments/assets/027a07fb-08a5-40a3-990d-63559010e330" />
 
 
