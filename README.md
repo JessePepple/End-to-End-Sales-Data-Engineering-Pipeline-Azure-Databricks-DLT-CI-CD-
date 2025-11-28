@@ -25,62 +25,6 @@ Ensures reliability, auditability, and reproducibility
 
 This project solves those challenges using a modern lakehouse approach.
 
-## Architecture
-Key Components
-
-Azure Data Factory (ADF) – Orchestrates ingestion and schedules pipeline runs
-
-Azure Databricks – Performs scalable compute & transformation
-
-Autoloader – Efficient streaming ingestion with schema evolution
-
-Delta Lake – Provides ACID transactions, time travel & reliability
-
-Delta Live Tables (DLT) – Manages SCDs, data quality & lineage
-
-Bronze → Silver → Gold layered architecture
-
-High-Level Flow
-
-Ingestion (ADF → Databricks)
-
-ADF pulls raw data from external sources (API, Blob, SQL DB)
-
-Data is landed as raw files in Bronze through Databricks Autoloader
-
-Bronze Layer (Raw Storage)
-
-Stores unprocessed raw data
-
-Handles schema inference & automatic file discovery
-
-## Silver Layer (Cleansed & Enriched)
-
-Data Transformation
-
-Deduplication
-
-Incremental load logic
-
-CDC handling using metadata columns
-
-## Gold Layer (DLT Managed Tables)
-
-Dimensions and fact tables
-
-Slowly Changing Dimensions (SCD Type 2)
-
-Surrogate key generation
-
-Business-ready data models
-
-## Consumption
-
-Dashboards (Power BI)
-
-Downstream applications
-
-Finance/ops analytics
 
 ## Phase 1 Data Ingestion
 
