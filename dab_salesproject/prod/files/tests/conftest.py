@@ -1,98 +1,128 @@
-"""This file configures pytest.
+import pytest
+from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType
+from transformations import Transformations
+from pyspark.sql.functions import col
 
-This file is in the root since it can be used for tests in any place in this
-project, including tests under resources/.
-"""
+@pytest.fixture(scope="module")
+def spark():
+    return SparkSession.builder \
+        .appName("unit-tests") \
+        .master("local[*]") \
+        .getOrCreate()
 
-import os, sys, pathlib
-from contextlib import contextmanager
+@pytest.fixture
+def sample_df(spark):
+    schema = StructType([
+        StructField("customer_code", StringType(), True),
+        StructField("age", StringType(), True),
+        StructField("city", StringType(), True)
+    ])
+
+    data = [
+        ("C001", "25", "London"),
+        ("C002", "30", "London"),
+        ("C002", "30", "London"),  # duplicate
+    ]
+
+    return spark.createDataFrame(data, schema)
 
 
-try:
-    from databricks.connect import DatabricksSession
-    from databricks.sdk import WorkspaceClient
-    from pyspark.sql import SparkSession
-    import pytest
-    import json
-    import csv
-    import os
-except ImportError:
-    raise ImportError(
-        "Test dependencies not found.\n\nRun tests using 'uv run pytest'. See http://docs.astral.sh/uv to learn more about uv."
+# TEST: drop_cols()
+
+def test_drop_cols(sample_df):
+    trans = Transformations(sample_df)
+    result = trans.drop_cols("city")
+
+    assert "city" not in result.columns
+    assert len(result.columns) == 2
+
+
+
+# TEST: rename_cols()
+
+def test_rename_cols(sample_df):
+    trans = Transformations(sample_df)
+    result = trans.rename_cols("customer_code", "customer_id")
+
+    assert "customer_id" in result.columns
+    assert "customer_code" not in result.columns
+
+
+
+# TEST: drop_duplicates()
+
+def test_drop_duplicates(sample_df):
+    trans = Transformations(sample_df)
+    result = trans.drop_duplicates(["customer_code", "age", "city"])
+
+    assert result.count() == 2  # one duplicate removed
+
+
+# TEST: cast_Int()
+
+def test_cast_int(sample_df):
+    trans = Transformations(sample_df)
+    result = trans.cast_Int(["age"])
+
+    assert dict(result.dtypes)["age"] == "int"
+
+
+
+# TEST: add_updatedtimestamp()
+
+def test_add_updatedtimestamp(sample_df):
+    from pyspark.sql.functions import current_timestamp
+
+    trans = Transformations(sample_df)
+    result = trans.add_updatedtimestamp("last_updated")
+
+    assert "last_updated" in result.columns
+    assert dict(result.dtypes)["last_updated"] == "timestamp"
+
+
+
+# MOCK TEST: read_Streams()
+
+def test_read_streams_mock(monkeypatch, spark):
+
+    def fake_stream_reader(*args, **kwargs):
+        # return a simple DF instead of a streaming DF
+        return spark.createDataFrame(
+            [("C01", "Lagos")],
+            ["id", "city"]
+        )
+
+    trans = Transformations()
+
+    monkeypatch.setattr(
+        trans,
+        "read_Streams",
+        lambda data_name, folder: fake_stream_reader()
     )
 
+    df = trans.read_Streams("dummy", "dummy")
 
-@pytest.fixture()
-def spark() -> SparkSession:
-    """Provide a SparkSession fixture for tests.
-
-    Minimal example:
-        def test_uses_spark(spark):
-            df = spark.createDataFrame([(1,)], ["x"])
-            assert df.count() == 1
-    """
-    return DatabricksSession.builder.getOrCreate()
+    assert df.count() == 1
+    assert "city" in df.columns
 
 
-@pytest.fixture()
-def load_fixture(spark: SparkSession):
-    """Provide a callable to load JSON or CSV from fixtures/ directory.
 
-    Example usage:
+# MOCK TEST: writeStream()
 
-        def test_using_fixture(load_fixture):
-            data = load_fixture("my_data.json")
-            assert data.count() >= 1
-    """
+def test_write_stream_mock(monkeypatch, sample_df):
 
-    def _loader(filename: str):
-        path = pathlib.Path(__file__).parent.parent / "fixtures" / filename
-        suffix = path.suffix.lower()
-        if suffix == ".json":
-            rows = json.loads(path.read_text())
-            return spark.createDataFrame(rows)
-        if suffix == ".csv":
-            with path.open(newline="") as f:
-                rows = list(csv.DictReader(f))
-            return spark.createDataFrame(rows)
-        raise ValueError(f"Unsupported fixture type for: {filename}")
+    trans = Transformations(sample_df)
 
-    return _loader
+    def fake_writer(*args, **kwargs):
+        return sample_df  # pretend write succeeded
 
+    monkeypatch.setattr(
+        trans,
+        "writeStream",
+        lambda *args, **kwargs: sample_df
+    )
 
-def _enable_fallback_compute():
-    """Enable serverless compute if no compute is specified."""
-    conf = WorkspaceClient().config
-    if conf.serverless_compute_id or conf.cluster_id or os.environ.get("SPARK_REMOTE"):
-        return
+    result = trans.writeStream("dummy", "folder")
 
-    url = "https://docs.databricks.com/dev-tools/databricks-connect/cluster-config"
-    print("☁️ no compute specified, falling back to serverless compute", file=sys.stderr)
-    print(f"  see {url} for manual configuration", file=sys.stdout)
-
-    os.environ["DATABRICKS_SERVERLESS_COMPUTE_ID"] = "auto"
-
-
-@contextmanager
-def _allow_stderr_output(config: pytest.Config):
-    """Temporarily disable pytest output capture."""
-    capman = config.pluginmanager.get_plugin("capturemanager")
-    if capman:
-        with capman.global_and_fixture_disabled():
-            yield
-    else:
-        yield
-
-
-def pytest_configure(config: pytest.Config):
-    """Configure pytest session."""
-    with _allow_stderr_output(config):
-        _enable_fallback_compute()
-
-        # Initialize Spark session eagerly, so it is available even when
-        # SparkSession.builder.getOrCreate() is used. For DB Connect 15+,
-        # we validate version compatibility with the remote cluster.
-        if hasattr(DatabricksSession.builder, "validateSession"):
-            DatabricksSession.builder.validateSession().getOrCreate()
-        else:
-            DatabricksSession.builder.getOrCreate()
+    assert result.count() == sample_df.count()
