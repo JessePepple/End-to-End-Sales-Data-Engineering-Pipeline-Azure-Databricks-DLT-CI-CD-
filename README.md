@@ -6,6 +6,17 @@ The solution is designed to handle incremental ingestion, schema evolution, CDC,
 
 For detailed storytelling of this project visit this -> https://www.jesseportfolio.co.uk/post/end-to-end-sales-data-engineering-pipeline-azure-databricks-dlt-ci-cd
 
+# Overall Project Impact
+
+
+End-to-End Automation: 100% of the pipeline automated from ingestion → transformation → delivery, ensuring minimal manual intervention.
+
+Version Control & CI/CD: All notebooks and pipelines managed via GitHub and Databricks Bundles, enabling reproducibility and seamless collaboration.
+
+Scalability & Maintainability: Architecture supports additional data sources and schema evolution without manual updates, future-proofing the pipeline.
+
+Business Value: Accelerated decision-making with timely, reliable sales data; reduced analytics engineering workload by ~2 hours per week.
+Business Value: Improved decision-making with timely, reliable sales data; reduced engineering workload for analytics by 16 hours/week
 <img width="1444" height="902" alt="Sales_Data" src="https://github.com/user-attachments/assets/027a07fb-08a5-40a3-990d-63559010e330" />
 
 
@@ -224,24 +235,4 @@ Result Statement:
 
 Delivered self-service analytics capabilities, enabling business users to access accurate sales insights directly from curated datasets.
 
-Overall Project Impact
 
-
-
-
-
-
-
-End-to-End automation: 100% of pipeline automated from ingestion → transformation → delivery
-
-
-
-Version control & CI/CD: 100% notebooks and pipelines managed via GitHub & Databricks Bundles
-
-
-
-Scalability & maintainability: Architecture supports additional sources and schema evolution without manual intervention
-
-
-
-Business Value: Improved decision-making with timely, reliable sales data; reduced engineering workload for analytics by X hours/week
