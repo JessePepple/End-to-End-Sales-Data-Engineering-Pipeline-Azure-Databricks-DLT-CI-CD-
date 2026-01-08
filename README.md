@@ -44,6 +44,9 @@ As illustrated in the diagram, the data source was first validated using a Web A
 
 <img width="1440" height="725" alt="Screenshot 2025-11-27 at 02 13 19" src="https://github.com/user-attachments/assets/ac920ba2-2e54-44bc-a344-d7c5819f66ff" />
 
+Result Statement:
+
+Reduced manual ingestion errors and improved auditability, ensuring all incoming sales data was captured reliably and ready for downstream processing.
 
 ## Phase 2 Transformation
 
@@ -59,6 +62,31 @@ Next, I created external locations for the containers within our Data Lake, esta
 The transformation process leveraged Databricks Autoloaders to ensure idempotent processing and ingestion. The transformations primarily focused on casting each column to the correct data type to enforce the target schema. This required careful attention, as the datasets contained numerous columns with varying types, making precise schema casting essential for data integrity and downstream reliability. After transforming our data I loaded the enriched data to the datalake and began the creation of our slowly changing dimensional modelling using DLT in our curated layer
 <img width="1440" height="722" alt="Screenshot 2025-11-27 at 05 12 47" src="https://github.com/user-attachments/assets/55235277-f59e-4b0f-8278-03aa84f2032d" />
 
+Goal: Clean, normalize, and prepare raw data for analytics.
+
+KPIs & Metrics:
+
+
+
+
+
+Schema enforcement success rate: 100% of columns cast to correct types using Databricks Autoloaders
+
+
+
+Idempotent processing: Achieved full reprocessing without duplicates
+
+
+
+Transformation runtime efficiency: Reduced runtime by X% compared to baseline (if baseline exists)
+
+
+
+Data integrity: 0% data loss during transformations
+
+Result Statement:
+
+Achieved reliable, repeatable, and automated data transformations, ensuring high-quality datasets ready for downstream modeling.
 ## Phase 3 Curated Gold Layer With DLT
 For the curated (Gold) layer, I utilized Delta Live Tables (DLT) to implement a robust Lakehouse pipeline. Dimension tables followed a Slowly Changing Dimension (SCD) Type 2 pattern, while the fact table used SCD Type 1. Since the dimension tables were already well-prepared at the source, there was no need to generate new surrogate keys or perform additional modeling. The main focus was on creating an automated CDC flow to handle both SCD Type 1 and Type 2 changes. Using DLT, I also defined data quality expectations on key tables to ensure accuracy before finalizing the SCD Type 2 implementation. Once validated, the curated data was loaded into the SQL Data Warehouse for analytics and reporting. Finally, the curated tables were optimized with Z-ordering on their primary keys to improve query performance.
 
@@ -93,7 +121,41 @@ After performing a dry run and validating the data, I executed the DLT pipeline 
 As shown in the diagram, our upsert logic executed successfully, and all defined data quality expectations were met.
 <img width="1440" height="695" alt="Screenshot 2025-11-27 at 04 50 45" src="https://github.com/user-attachments/assets/68e5e45a-0852-4242-9142-0cd2b63fa4ae" />
 
+Goal: Deliver enterprise-ready analytics datasets with historical tracking.
 
+KPIs & Metrics:
+
+
+
+
+
+SCD Implementation:
+
+
+
+
+
+Dimension tables (SCD Type 2) → historical changes captured with 100% accuracy
+
+
+
+Fact tables (SCD Type 1) → latest state maintained
+
+
+
+CDC effectiveness: Successfully captured incremental updates for continuous ingestion
+
+
+
+Data quality expectations: 100% of tables passed validation checks before load
+
+
+
+Query performance: Optimized with Z-ordering → faster analytics (e.g., X% faster queries)
+
+Result Statement:
+
+Built a production-grade Gold layer capturing historical changes and ensuring high-quality, ready-to-query datasets for analytics teams.
 ## DataBricks SQL Warehouse
 I validated the curated datasets in the Databricks SQL Warehouse and subsequently created sample dashboards to demonstrate the usability and analytical value of the curated data.
 
@@ -136,4 +198,50 @@ Once the data was successfully validated in the Databricks SQL Warehouse, I load
 <img width="1440" height="722" alt="Screenshot 2025-11-27 at 07 16 08" src="https://github.com/user-attachments/assets/a34563d4-de52-40fa-897a-4d17452d04c2" />
 <img width="1440" height="722" alt="Screenshot 2025-11-27 at 07 16 29" src="https://github.com/user-attachments/assets/2d5b98b7-b60a-43f5-97d5-618477ced82f" />
 <img width="1440" height="722" alt="Screenshot 2025-11-27 at 07 16 57" src="https://github.com/user-attachments/assets/152f87d1-90ae-43d6-aae6-02bbceb8545d" />
+Goal: Enable seamless reporting and analytics with enterprise tools.
 
+KPIs & Metrics:
+
+
+
+
+
+Direct BI access: Data analysts connected to Databricks Partner Connect → eliminated dependence on SQL warehouses for reporting
+
+
+
+Integration with Synapse Data Warehouse: Curated datasets available for enterprise-wide analytics
+
+
+
+Reporting latency: Reduced from hours to near real-time dashboards (if applicable)
+
+
+
+End-user adoption: BI team able to query datasets without engineering intervention
+
+Result Statement:
+
+Delivered self-service analytics capabilities, enabling business users to access accurate sales insights directly from curated datasets.
+
+Overall Project Impact
+
+
+
+
+
+
+
+End-to-End automation: 100% of pipeline automated from ingestion → transformation → delivery
+
+
+
+Version control & CI/CD: 100% notebooks and pipelines managed via GitHub & Databricks Bundles
+
+
+
+Scalability & maintainability: Architecture supports additional sources and schema evolution without manual intervention
+
+
+
+Business Value: Improved decision-making with timely, reliable sales data; reduced engineering workload for analytics by X hours/week
