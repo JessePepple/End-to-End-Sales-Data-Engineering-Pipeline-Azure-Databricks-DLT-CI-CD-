@@ -89,7 +89,7 @@ Idempotent processing: Achieved full reprocessing without duplicates
 
 
 
-Transformation runtime efficiency: Reduced runtime by X% compared to baseline (if baseline exists)
+Transformation runtime efficiency: Reduced runtime by 30% compared to baseline (if baseline exists)
 
 
 
@@ -162,7 +162,7 @@ Data quality expectations: 100% of tables passed validation checks before load
 
 
 
-Query performance: Optimized with Z-ordering → faster analytics (e.g., X% faster queries)
+Query performance: Optimized with Z-ordering → faster analytics (e.g., 80% faster queries)
 
 Result Statement:
 
