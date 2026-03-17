@@ -4,7 +4,7 @@ resources:
       name: Gold_Curated_Pipeline
       libraries:
         - glob:
-            include: /../../jessepepple36@gmail.com/dab_salesproject/resources/Gold_Pipeline/transformations/**
+            include: ../../jessepepple36@gmail.com/dab_salesproject/resources/Gold_Pipeline/transformations/**
       schema: gold
       photon: true
       catalog: sales_project
