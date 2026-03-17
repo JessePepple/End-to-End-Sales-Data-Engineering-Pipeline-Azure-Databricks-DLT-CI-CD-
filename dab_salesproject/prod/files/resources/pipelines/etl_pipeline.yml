@@ -9,4 +9,4 @@ resources:
       photon: true
       catalog: sales_project
       serverless: true
-      root_path: /Workspace/Users/jessepepple36@gmail.com/dab_salesproject/resources/Gold_Pipeline
+      root_path: ../../jessepepple36@gmail.com/dab_salesproject/resources/Gold_Pipeline
