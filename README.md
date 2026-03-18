@@ -1,6 +1,12 @@
 # End-to-End-Sales-Data-Engineering-Pipeline-Azure-Databricks-DLT-CI-CD-
 
+## Project Structure
+Databricks notebooks and pipeline configurations are located in dab_salesproject/prod/ and deployed via Databricks Asset Bundles. The databricks.yml file defines the bundle configuration. ADF pipeline artefacts are in pipeline/, dataset/, and linkedService/.
+This project builds on the architecture established in the Music Streaming project, with a focus on more complex multi-column schema casting requirements and REST API ingestion with source validation via ADF Web Activity.
+
 This project demonstrates a complete Azure Data Engineering solution that processes data from ingestion to transformation and delivery using modern cloud-native best practices. The architecture leverages Azure Data Factory, Azure Databricks, and Delta Live Tables (DLT) to build a scalable, reliable, and production-ready data pipeline.
+
+
 
 The solution is designed to handle incremental ingestion, schema evolution, CDC, and dimensional modelling, making it suitable for real enterprise workloads.
 
