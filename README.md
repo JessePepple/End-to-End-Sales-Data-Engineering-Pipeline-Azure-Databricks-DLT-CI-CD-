@@ -15,8 +15,8 @@ Version Control & CI/CD: All notebooks and pipelines managed via GitHub and Data
 
 Scalability & Maintainability: Architecture supports additional data sources and schema evolution without manual updates, future-proofing the pipeline.
 
-Business Value: Accelerated decision-making with timely, reliable sales data; reduced analytics engineering workload by ~2 hours per week.
-Business Value: Improved decision-making with timely, reliable sales data; reduced engineering workload for analytics by 16 hours/week
+Business Value: Reduced manual ingestion errors and improved data reliability, enabling analysts to query curated datasets without engineering intervention.
+
 <img width="1444" height="902" alt="Sales_Data" src="https://github.com/user-attachments/assets/027a07fb-08a5-40a3-990d-63559010e330" />
 
 
