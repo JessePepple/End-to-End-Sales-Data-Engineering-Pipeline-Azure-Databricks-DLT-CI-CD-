@@ -1,10 +1,9 @@
+#Libraries
 import sys
 import pytest
 from pyspark.sql import SparkSession
 from pyspark.sql.types import *
 from pyspark.sql.functions import *
-
-
 
 sys.path.append(
     "/Workspace/Users/jessepepple36@gmail.com/End-to-End-Sales-Data-Engineering-Pipeline-Azure-Databricks-DLT-CI-CD-/dab_salesproject/prod/files/utils/"
