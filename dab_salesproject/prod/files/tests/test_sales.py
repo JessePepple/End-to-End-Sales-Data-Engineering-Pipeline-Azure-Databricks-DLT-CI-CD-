@@ -22,9 +22,9 @@ def spark():
     return spark
 
 
-# ---------------------------
+
 # drop_cols
-# ---------------------------
+
 def test_drop_cols(spark):
     data = [("Alice", 1, "UK"), ("Bob", 2, "US")]
     df = spark.createDataFrame(data, ["name", "age", "country"])
