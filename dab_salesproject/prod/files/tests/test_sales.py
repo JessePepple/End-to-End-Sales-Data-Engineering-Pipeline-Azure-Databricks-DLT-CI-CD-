@@ -12,9 +12,8 @@ sys.path.append(
 from Silver_Transformations import Transformations  
 
 
-# ---------------------------
 # Spark fixture
-# ---------------------------
+
 @pytest.fixture(scope="session")
 def spark():
     spark = SparkSession.getActiveSession()
