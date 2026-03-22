@@ -1,10 +1,11 @@
 # End-to-End-Sales-Data-Engineering-Pipeline-Azure-Databricks-DLT-CI-CD-
 
 ## Project Structure
-Databricks notebooks and pipeline configurations are located in dab_salesproject/prod/ and deployed via Databricks Asset Bundles. The databricks.yml file defines the bundle configuration. ADF pipeline artefacts are in pipeline/, dataset/, and linkedService/.
-This project builds on the architecture established in the Music Streaming project, with a focus on more complex multi-column schema casting requirements and REST API ingestion with source validation via ADF Web Activity.
+This project showcases a complete end-to-end Azure Data Engineering solution, handling data from ingestion through transformation to delivery using modern, cloud-native best practices. The architecture leverages Azure Data Factory, Azure Databricks, and Delta Live Tables (DLT) to create a scalable, reliable, and production-ready data pipeline.
 
-This project demonstrates a complete Azure Data Engineering solution that processes data from ingestion to transformation and delivery using modern cloud-native best practices. The architecture leverages Azure Data Factory, Azure Databricks, and Delta Live Tables (DLT) to build a scalable, reliable, and production-ready data pipeline.
+The pipeline is designed to manage incremental data ingestion, support schema evolution, implement change data capture (CDC), and enable dimensional modelingmaking it fully equipped to handle real-world enterprise workloads efficiently. Functions used in the enrichment layer were unit tested before deployments
+
+
 
 
 
@@ -170,6 +171,10 @@ Data quality expectations: 100% of tables passed validation checks before load
 
 Query performance: Optimized with Z-ordering → faster analytics (e.g., 80% faster queries)
 
+Result Statement:
+
+
+Built a production-grade Gold layer capturing historical changes and ensuring high-quality, ready-to-query datasets for analytics teams.
 
 ## Unit Testings
 
@@ -179,10 +184,7 @@ Before deploying our Asset Bundles, I performed unit testing in Databricks to va
 <img width="1239" height="679" alt="Screenshot 2026-03-21 at 23 45 12" src="https://github.com/user-attachments/assets/209baf0d-7de7-43a0-a240-a242b5fa91a7" />
 
 
-Result Statement:
 
-
-Built a production-grade Gold layer capturing historical changes and ensuring high-quality, ready-to-query datasets for analytics teams.
 ## DataBricks SQL Warehouse
 I validated the curated datasets in the Databricks SQL Warehouse and subsequently created sample dashboards to demonstrate the usability and analytical value of the curated data.
 
