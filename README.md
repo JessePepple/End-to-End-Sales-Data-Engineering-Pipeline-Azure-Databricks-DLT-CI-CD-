@@ -170,7 +170,17 @@ Data quality expectations: 100% of tables passed validation checks before load
 
 Query performance: Optimized with Z-ordering → faster analytics (e.g., 80% faster queries)
 
+
+## Unit Testings
+
+Before deploying our Asset Bundles, I performed unit testing in Databricks to validate that our class functions returned the expected results without any issues.
+
+<img width="1239" height="679" alt="Screenshot 2026-03-21 at 23 45 03" src="https://github.com/user-attachments/assets/7bec2450-a51b-431a-bad0-0966239608a8" />
+<img width="1239" height="679" alt="Screenshot 2026-03-21 at 23 45 12" src="https://github.com/user-attachments/assets/209baf0d-7de7-43a0-a240-a242b5fa91a7" />
+
+
 Result Statement:
+
 
 Built a production-grade Gold layer capturing historical changes and ensuring high-quality, ready-to-query datasets for analytics teams.
 ## DataBricks SQL Warehouse
