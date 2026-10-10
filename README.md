@@ -243,7 +243,6 @@ Integration with Synapse Data Warehouse: Curated datasets available for enterpr
 
 
 
-Reporting latency: Reduced from hours to near real-time dashboards (if applicable)
 
 
 
